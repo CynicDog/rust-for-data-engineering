@@ -1,0 +1,28 @@
+[package]
+name = "common"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.6.0", features = ["derive"] }
+delta_kernel = { git = "https://github.com/delta-io/delta-kernel-rs.git", version = "0.20.0", features = ["default-engine-rustls", "internal-api"] }
+url = "2"
+
+arrow_57 = { package = "arrow", version = "57", optional = true, features = ["chrono-tz", "ffi", "json"] }
+parquet_57 = { package = "parquet", version = "57", optional = true, features = ["async", ] }
+object_store_12 = { package = "object_store", version = "0.12.3", optional = true, features = ["aws", "azure", "gcp", "http"] }
+
+[features]
+default = ["arrow"]
+arrow = ["arrow-57"]
+
+arrow-57 = [
+    "dep:arrow_57",
+    "dep:parquet_57",
+    "dep:object_store_12",
+    "delta_kernel/arrow-57",
+]
+
+need-arrow = []
+arrow-conversion = ["need-arrow"]
+arrow-expression = ["need-arrow"]
