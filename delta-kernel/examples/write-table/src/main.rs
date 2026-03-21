@@ -36,8 +36,8 @@ struct Cli {
     location_args: LocationArgs,
 
     /// Path to a JSON file
-    #[arg(long, short = 'i', )]
-    input: Option<String>,
+    #[arg(long, short = 'i')]
+    data: Option<String>,
 
     /// Comma-separated schema specification of the form `field_name:data_type`
     #[arg(
@@ -90,7 +90,7 @@ async fn try_main() -> DeltaResult<()> {
     let snapshot = create_or_get_base_snapshot(&url, &engine, &cli.schema).await?;
 
     // Create sample data based on the schema
-    let sample_data = if let Some(input_path) = &cli.input {
+    let sample_data = if let Some(input_path) = &cli.data {
         read_json_data(input_path, &snapshot.schema())?
     } else {
         create_sample_data(&snapshot.schema(), cli.num_rows)?
